@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NEEDY</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" >
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+    <script>
+
+      $(document).ready(function () {
+        
+    //==========UPDATE PASSWORD=====================    
+        $("#txtButton").click(function () {
+  
+          var emailku = $("#txtEmail").val();
+          var oldpwdku = $("#oldpwd").val();
+          var newpwdku = $("#newpwd").val();
+          var conpwdku = $("#conpwd").val();
+          var objNew = {
+            type: "get",
+            url: "/update-info-settings",
+            data: {
+              kuchemail: emailku,
+              kucholdpwd: oldpwdku,
+              kuchnewpwd: newpwdku,
+              kuchconpwd: conpwdku,
+            }
+          }
+          $.ajax(objNew).done(function (respkuch) {
+            $("#resp").html(respkuch);
+          }).fail(function (errkuch) {
+            $("#resp").html(errkuch);
+          })
+        })
+        //================CHECK EMAIL================
+        $("#txtEmail").blur(function () {
+                var emailid = $(this).val();
+                var obj = {
+                    type: "get",
+                    url: "/chk-email-update-pwd",
+                    data: {
+                        kuchemail: emailid
+                    }
+                }
+                $.ajax(obj).done(function (respkuch) {
+                    $("#res").html(respkuch);
+                }).fail(function (errkuch) {
+                    $("#res").html(errkuch);
+                })
+            })
+
+            function setActiveUser()
+            {
+              var au=localStorage.getItem("activeKuch");
+             // alert(au);
+             $("#spemailwelcome").html(au);
+             $("#txtEmail").val(au).prop("readonly",true);
+            }
+            setActiveUser();
+
+            $("#logout").click(function(){
+            localStorage.removeItem("active");
+            location.href="index.html";
+          })
+      })
+    </script>
+
+</head>
+
+<body style="background-color:#adebad;">
+  <nav class="navbar bg-body-tertiary ">
+    <div class="container-fluid">
+    
+        <a class="navbar-brand" href="#"><b><font size="6" color="#70db70">Medi</font><font>Connect</font></b></a>
+        <form class="d-flex" role="search" method="post" enctype="multipart/form-data">
+            <button class="btn btn-success me-5" type="button" data-bs-target="#login" id="logout" data-bs-toggle="modal">Logout</button>
+        </form>
+    </div>
+</nav>
+<div class="container mt-5" style="background-color: #5cd65c;">
+<div class="text-center" >
+<font size="4"><b>Needy Dashboard</b></font>
+</div>
+</div>
+  <div class="container mt-5" style="background-color: #5cd65c;">
+    
+    <div class="text-center">
+      <font size="6" face="Bebas Neue"><b>Welcome To MediConnect <span id="spemailwelcome">*</span</b></font>
+      <p>
+        We are thrilled to have you join our community as a medicine receiver. Your role
+        as a medicine receiver is of utmost importance in ensuring the smooth functioning of the pharmaceutical supply chain.
+        Allow us to provide you with an introduction to your work and the significant role you play in the process.
+      </p>
+      <p>
+        As a medicine receiver, you are an essential link in the distribution network of medicines. Your primary responsibility
+        is to receive and inspect incoming shipments of medicines, ensuring their quality, accuracy, and compliance with
+        regulatory standards. You are entrusted with the critical task of verifying the integrity and authenticity of the
+        medicines, guaranteeing that they meet the necessary standards for safety and effectiveness.
+      </p>
+  </div>
+
+    <div class="row offset-1 px-5 py-3 ">
+  
+      <!--CARD1-->
+      <div class="card col-md-3 mx-3 pt-2 border border-success border-3" style="width: 18rem;">
+        <img src="pics/profile.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <a href="profile-needy.html" class="btn btn-success col-md-12">Profile</a>
+        </div>
+      </div>
+      <!--CARD2-->
+      <div class="card col-md-3 mx-3 pt-2 border border-success border-3" style="width: 18rem;">
+        <img src="pics/find.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <a href="med-finder.html" class="btn btn-success col-md-12">Locate Medicine</a>
+        </div>
+      </div>
+
+      <!--CARD3-->
+      <div class="card col-md-3 mx-3 pt-2 border border-success border-3" style="width: 18rem;">
+        <img src="pics/setting.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <button class="btn btn-success col-md-12" type="button" data-bs-target="#settings" data-bs-toggle="modal">Settings</button>
+        </div>
+      </div>
+
+      <!--CARD4
+      <div class="card col-md-3 mx-3 pt-2 border border-success border-3" style="width: 18rem;">
+        <img src="pics/manage.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <a href="#" class="btn btn-success col-md-12">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>-->
+
+<!--MODAL UPDATE PASSWORD =====================================================================================================-->
+<div class="modal fade" id="settings" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h1 class="modal-title fs-5" id="staticBackdropLabel">Settings</h1>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <form method="post" enctype="multipart/form-data">
+      <input type="hidden" id="hdn" name="hdn">
+      <div class="modal-body">
+
+
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">EmailID</label>
+          <span id="res" class="form-text">*</span>
+          <input type="email" class="form-control" id="txtEmail" name="txtEmail" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Old Password</label>
+          <input type="password" class="form-control" id="oldpwd" name="oldpwd">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">New Password</label>
+          <input type="password" class="form-control" id="newpwd" name="newpwd">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Confirm Password</label>
+          <input type="password" class="form-control" id="conpwd" name="conpwd">
+        </div>
+
+        <br>
+
+        <center><input type="button" class="btn btn-success" id="txtButton" value="Update"></input>
+        <span id="resp" class="form-text">*</span></center>
+
+      </div>
+
+</body> 
+</html>

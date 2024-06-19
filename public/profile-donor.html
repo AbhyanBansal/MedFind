@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DONOR-PROFILE</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+    <script>
+
+        //==================pic upload=============
+        function doPrev(refFile, prevImg) {
+            const [file] = refFile.files
+            if (file) {
+                prevImg.src = URL.createObjectURL(file)
+            }
+        }
+
+        /*$(document).ready(function () {
+            $("#savebtn").click(function () {
+              
+                var emailku = $("#email").val();
+                var nameku = $("#name").val();
+                var mobku = $("#Mobile").val();
+                var addku = $("#Address").val();
+                var cityku = $("#txtCity").val();
+                var idtypeku = $("#txtidtype").val();
+                var avail1ku = $("#avail1").val();
+                var avail2ku = $("#avail2").val();
+
+                var obj = {
+                    type: "get",
+                    url: "/save-profile-data",
+                    data: {
+                        email: emailku,
+                        name: nameku,
+                        mob: mobku,
+                        add: addku,
+                        city: cityku,
+                        idtype: idtypeku,
+                        ahours: avail1ku + " to " + avail2ku
+                    }
+                }
+                $.ajax(obj).done(function (respkuch) {
+                    $("#spansign").html(respkuch);
+                }).fail(function (errkuch) {
+                    $("#spansign").html(errkuch);
+                })
+            })
+        })*/
+
+        //===============search button====================
+    $(document).ready(function () {
+    $("#searchbutton").click(dosearch);
+      function dosearch()
+      {
+        //alert();
+        var kuchemail=$("#email").val();
+        var obj={
+                    type:"get",
+                    url:"/get-json-record-search-donor",
+                    data:{
+                    kuemail:kuchemail
+                    }
+                }
+
+            $.ajax(obj).done(function(respJSONKuch)
+            {            
+                var av=respJSONKuch[0].ahours.split(" to ");
+                var avr=av[0];
+                var avf=av[1];
+                //alert(avr);
+                //alert(avf);
+                $("#avail1").val(avr);
+                $("#avail2").val(avf);
+            
+                //alert(JSON.stringify(respJSONKuch));
+                //$("#res").html(respKuch);
+                $("#name").val(respJSONKuch[0].name);
+                $("#Mobile").val(respJSONKuch[0].mobile);
+                $("#imgPrev").prop("src","uploads/"+respJSONKuch[0].pic);
+                $("#Address").val(respJSONKuch[0].address);
+                $("#txtCity").val(respJSONKuch[0].city);
+                $("#txtidtype").val(respJSONKuch[0].proof)
+                $("#pPic").val(respJSONKuch[0].pic);
+
+            }).fail(function(errKuch){
+                //alert(errKuch)
+                $("#spansign").html(respKuch);
+            })
+          }
+
+          function setActiveUser()
+            {
+              var au=localStorage.getItem("activeKuch");
+             // alert(au);
+             $("#email").val(au).prop("readonly",true);
+            }
+            setActiveUser();
+
+            $("#logout").click(function(){
+            localStorage.removeItem("active");
+            location.href="index.html";
+            })
+        })
+    </script>
+
+</head>
+
+<body style="background-color:#adebad;">
+    <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+
+            <a class="navbar-brand" href="#"><b>
+                    <font size="6" color="#70db70">Medi</font>
+                    <font>Connect</font>
+                </b></a>
+            <form class="d-flex" role="search" method="post" enctype="multipart/form-data">
+                <button class="btn btn-success" type="button" data-bs-target="#login"
+                    data-bs-toggle="modal" id="logout">Logout</button>
+            </form>
+        </div>
+    </nav>
+
+
+    <div class="section mt-5 pt-2 pb-2 ">
+        <div class="container border border-success border-3 px-5 py-2 pb-2 bg-light">
+            <div class="text-center">
+                <h2>Setup Donor Profile</h2>
+            </div>
+            <div class="row justify-content-center my-5">
+                <div class=" col-lg-12">
+                    <form method="post" enctype="multipart/form-data" >
+
+                        <div class="row py-2">
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email Address:</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="user@xyz.com">
+                            </div>
+                            <div class="col-md-1">
+                                <label for=""></label>
+                                <button class="btn btn-success me-5" type="button" id="searchbutton"
+                                    >Search</button>
+                            </div>
+                        </div>
+
+                        <div class="row py-2">
+                            <div class="col-md-6">
+                                <label for="name" class="form-label">Name:</label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="User">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="Mobile" class="form-label">Mobile:</label>
+                                <input type="text" class="form-control" id="Mobile" name="Mobile"
+                                    placeholder="Enter Mobile Number(10 digits)">
+                            </div>
+                        </div>
+
+                        <div class="row py-2">
+                            <div class="col-md-8">
+                                <label for="Address" class="form-label">Address:</label>
+                                <input type="text" class="form-control" id="Address" name="Address">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="txtCity" class="form-label">City:</label>
+                                <input type="text" class="form-control" id="txtCity" name="txtCity">
+                            </div>
+                        </div>
+
+                        <div class="row  py-2">
+                            <div class="col-md-6">
+                                <label for="idproof">ID Proof:</label>
+                                <select class="form-select col-md-3" aria-label="multiple select example" id="txtidtype"
+                                    name="txtidtype">
+                                    <option selected>Select</option>
+                                    <option value="Adhaar Card">Adhaar Card</option>
+                                    <option value="Passport">Passport</option>
+                                    <option value="PanCard">PanCard</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-outline flex-fill mb-0">
+                                    <label class="form-label" for="form3Example4c">Upload Picture:</label>
+                                    <input type="file" name="pPic" id="pPic" onchange="doPrev(this,imgPrev)"
+                                        accept="image/*" class="form-control" />
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <img src="pics/default.jpg" name="imgPrev" id="imgPrev" alt="" width="100" height="100">
+                            </div>
+                        </div>
+
+                        <div class="row py-2">
+                            <div class="col-md-2 form-label">
+                                <label for="availablity1">Available From:</label>
+                                <input type="text" class="form-control" id="avail1" name="avail1">
+                            </div>
+                            <div class="col-md-2 form-label">
+                                <label for="availablity2">to:</label>
+                                <input type="text" class="form-control" id="avail2" name="avail2">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <input class="btn btn-outline-success offset-5 col-md-1 me-1" type="submit" id="savebtn" formaction="/save-donor-profile"
+                                value="Save"></input>
+
+                            <button class="btn btn-outline-success col-md-1 " type="submit" data-bs-target="" formaction="/update-donor-profile"
+                                data-bs-toggle="modal">Update</button>
+                            <span id="spansign" class="form-text">*</span>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

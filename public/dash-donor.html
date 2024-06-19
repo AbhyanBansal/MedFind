@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DONOR</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" >
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+    <script>
+
+      $(document).ready(function () {
+        
+    //==========UPDATE PASSWORD=====================    
+        $("#txtButton").click(function () {
+  
+          var emailku = $("#txtEmail").val();
+          var oldpwdku = $("#oldpwd").val();
+          var newpwdku = $("#newpwd").val();
+          var conpwdku = $("#conpwd").val();
+          var objNew = {
+            type: "get",
+            url: "/update-info-settings",
+            data: {
+              kuchemail: emailku,
+              kucholdpwd: oldpwdku,
+              kuchnewpwd: newpwdku,
+              kuchconpwd: conpwdku,
+            }
+          }
+          $.ajax(objNew).done(function (respkuch) {
+            $("#updatepwdspan").html(respkuch);
+          }).fail(function (errkuch) {
+            $("#updatepwdspan").html(errkuch);
+          })
+        })
+        //================CHECK EMAIL================
+        $("#txtEmail").blur(function () {
+                var emailid = $(this).val();
+                var obj = {
+                    type: "get",
+                    url: "/chk-email-update-pwd",
+                    data: {
+                        kuchemail: emailid
+                    }
+                }
+                $.ajax(obj).done(function (respkuch) {
+                    $("#updatepwdemailspan").html(respkuch);
+                }).fail(function (errkuch) {
+                    $("#updatepwdemailspan").html(errkuch);
+                })
+            });
+
+            //======================================
+            function setActiveUser()
+            {
+              var au=localStorage.getItem("activeKuch");
+             // alert(au);
+             $("#spemailwelcome").html(au);
+             $("#txtEmail").val(au).prop("readonly",true);
+            }
+            setActiveUser();
+            
+
+      $("#logout").click(function()
+      {
+            localStorage.removeItem("active");
+            location.href="index.html";
+          })
+      })
+    </script>
+
+</head>
+
+<body style="background-color:#adebad;">
+  <nav class="navbar bg-body-tertiary ">
+    <div class="container-fluid">
+    
+        <a class="navbar-brand" href="#"><b><font size="6" color="#70db70">Medi</font><font>Connect</font></b></a>
+        <form class="d-flex" role="search" method="post" enctype="multipart/form-data">
+            <button class="btn btn-success me-5" type="button" data-bs-target="#login" data-bs-toggle="modal" id="logout">Logout</button>
+        </form>
+    </div>
+</nav>
+
+<h2>
+ 
+</h2>
+<div class="container mt-5" style="background-color: #5cd65c;">
+<div class="text-center" >
+<font size="4"><b>Donor Dashboard</b></font>
+</div>
+</div>
+  <div class="container mt-5" style="background-color: #5cd65c;">
+    
+    <div class="text-center">
+      <font size="6" face="Bebas Neue"><b>Welcome To MediConnect <span id="spemailwelcome" >*</span></b></font>
+      <p>
+       We are thrilled to have you as a potential medicine donor and appreciate your
+        interest in making a difference in the lives of others. By joining our platform, you are taking a meaningful step
+        towards creating a healthier and more compassionate community.
+      </p><p>
+        At MediConnect, we believe that everyone deserves access to vital medications, regardless of their financial or
+        social circumstances. Our platform serves as a bridge between individuals who have surplus or unused medicines and those
+        who are in need. By donating your unused medicines, you can directly contribute to improving the quality of life for
+        others and help address the issue of medication scarcity.
+      </p>
+  </div>
+
+    <div class="row  py-3 px-2">
+      
+      <!--CARD1-->
+      <div class="card col-md-3 mx-3 pt-2 border border-success border-3" style="width: 18rem;">
+        <img src="pics/profile.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <a href="profile-donor.html" class="btn btn-success col-md-12">Profile</a>
+        </div>
+      </div>
+      <!--CARD2-->
+      <div class="card col-md-3 mx-3 pt-2 border border-success border-3" style="width: 18rem;">
+        <img src="pics/Pledge.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+
+
+          <a href="medicnes-donor.html" class="btn btn-success col-md-12">Pledge Medicine</a>
+        </div>
+      </div>
+
+      <!--CARD3-->
+      <div class="card col-md-3 mx-3 pt-2 border border-success border-3" style="width: 18rem;">
+        <img src="pics/manage.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <a href="med-manager.html" class="btn btn-success col-md-12">Medicine Manager</a>
+        </div>
+      </div>
+
+      <!--CARD4-->
+      <div class="card col-md-3 mx-3 pt-2 border border-success border-3" style="width: 18rem;">
+        <img src="pics/setting.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <button class="btn btn-success col-md-12" type="button" data-bs-target="#settings" data-bs-toggle="modal">Settings</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!--MODAL UPDATE PASSWORD =====================================================================================================-->
+<div class="modal fade" id="settings" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h1 class="modal-title fs-5" id="staticBackdropLabel">Settings</h1>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <form method="post" enctype="multipart/form-data">
+      <input type="hidden" id="hdn" name="hdn">
+      <div class="modal-body">
+
+
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">EmailID</label>
+          <span id="updatepwdemailspan" class="form-text">*</span>
+          <input type="email" class="form-control" id="txtEmail" name="txtEmail" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Old Password</label>
+          <input type="password" class="form-control" id="oldpwd" name="oldpwd">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">New Password</label>
+          <input type="password" class="form-control" id="newpwd" name="newpwd">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Confirm Password</label>
+          <input type="password" class="form-control" id="conpwd" name="conpwd">
+        </div>
+
+        <br>
+
+        <center><input type="button" class="btn btn-success" id="txtButton" value="Update"></input>
+        <span id="updatepwdspan" class="form-text">*</span></center>
+
+      </div>
+
+</body> 
+
+</html>

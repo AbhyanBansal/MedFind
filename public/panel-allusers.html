@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" >
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="script/angular.min.js"></script>
+   
+    <script>
+        var module=angular.module("myModule",[]);
+        module.controller("myController",function($scope,$http){
+          
+            $scope.jsonArray;
+            
+            $scope.fetchRecords=function()
+                {
+                    var url="/get-angular-all-records";
+                    $http.get(url).then(done,fail);
+                    function done(response)
+                        {
+                            //alert(JSON.stringify(response.data));
+                            $scope.jsonArray=response.data;
+
+                        }
+                     function fail(response)
+                        {
+                                alert(response.data);
+                        }   
+                }
+//===================================
+                $scope.doBlock=function(email)
+                {
+                    var url="/do-block-account?emailk="+email;
+
+                    $http.get(url).then(done,fail);
+                    function done(response)
+                        {
+                            alert(response.data);
+                            $scope.fetchRecords();
+                            //$scope.jsonArray=response.data;
+
+                        }
+                     function fail(response)
+                        {
+                                alert(response.data);
+                        } 
+
+                }
+//===================================
+                $scope.doResume=function(email)
+                {
+                    var url="/do-resume-account?emailk="+email;
+
+                    $http.get(url).then(done,fail);
+                    function done(response)
+                        {
+                            alert(response.data);
+                            $scope.fetchRecords();
+                            //$scope.jsonArray=response.data;
+
+                        }
+                     function fail(response)
+                        {
+                                alert(response.data);
+                        } 
+
+                }
+
+        })
+    </script>
+</head>
+    <body ng-app="myModule" ng-controller="myController" ng-init="fetchRecords()" style="background-color:#adebad;">
+
+            <!--NAVBAR SECTION-->
+  <nav class="navbar bg-body-tertiary ">
+    <div class="container-fluid">
+    
+        <a class="navbar-brand" href="#"><b><font size="6" color="#70db70">Medi</font><font>Connect</font></b></a>
+        <form class="d-flex" role="search" method="post" enctype="multipart/form-data">
+            <button class="btn btn-success me-5" type="button" data-bs-target="#login" data-bs-toggle="modal">Logout</button>
+        </form>
+    </div>
+</nav>
+
+<!-- //====================================================-->
+
+    <div class="container">
+      <!--  
+            ============FETCH BUTTON========================
+            <div class="row offset-4 mt-4  col-md-4">
+            <button type="button" class="btn btn-outline-warning btn-lg" ng-click="fetchRecords()">Fetch All Users</button>
+            </div> 
+        -->
+<br>
+<!--=====TABLE===========================================================================================================================================-->
+<table  border="2" class="table table-hover caption-top rounded-bottom-5">
+    <caption class="h1 mt-4 text-center bg-success text-white-50 " style="margin-bottom: 0px; margin-top: 5px;">List of users</caption>
+    <tr>
+        <th >S.No</th><th>EmailID</th><th>DOS</th><th>Type</th><th>Status</th><th>Operations</th>
+    </tr>
+    <tr ng-repeat="obj in jsonArray ">
+        <td>{{$index+1}}</td>
+        <td>{{obj.email}}</td>
+        <td>{{obj.dos}}</td>
+        <td>{{obj.type}}</td>
+        <td>{{obj.status}}</td>
+        <td>
+            <button type="button" class="btn btn-outline-success" ng-click="doResume(obj.email)">Resume</button>
+            <button type="button" class="btn btn-outline-danger" ng-click="doBlock(obj.email)">Block</button>
+
+        </td>
+    </tr>
+  </table>
+    </div>
+
+        
+    </body>
+</html>
